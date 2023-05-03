@@ -18,17 +18,56 @@ class Movie
     public $genre;
     public $year;
     public $mainCharacter;
-
+    public $price;
+    public $discount;
+    public $finalPrice;
 
     // definisco un costruttore (per rendere obbligatorio l'indicazione dei dati)
-    function __construct(string $title, string $genre, int $year, string $mainCharacter)
+    function __construct(string $title, string $genre, int $year, string $mainCharacter, int $price)
     {
         $this->title = $title;
         $this->genre = $genre;
         $this->year = $year;
-        $this->$mainCharacter = $mainCharacter;
+        $this->mainCharacter = $mainCharacter;
+        $this->price = $price;
+
+        $this->setDiscount($year);
+        $this->setFinalPrice($price, $this->setDiscount($year));
+    }
+
+    public function setDiscount($year)
+    {
+        $movieAge = date("Y") - $year;
+        if ($movieAge > 2) {
+
+            $this->discount = 30;
+            return $this->discount;
+
+        } else {
+
+            $this->discount = 0;
+            return $this->discount;
+        }
+    }
+
+    public function setFinalPrice($price, $discount)
+    {
+        $this->finalPrice = ($price * (100 - $discount) / 100);
     }
 }
+
+// istanzio una nuova entità, cioè un nuovo oggetto
+$interstellar = new Movie("Interstellar", "science fiction", 2014, "Matthew McConaughey", 15);
+
+// istanzio una nuova entità, cioè un nuovo oggetto
+$inception = new Movie("Inception", "science fiction", 2010, "Leonardo DiCaprio", 10);
+
+// istanzio una nuova entità, cioè un nuovo oggetto
+$oppenheimer = new Movie("Oppenheimer", "biographical", 2023, "Cillian Murphy", 20);
+
+// stampo a schermo le nuova entità con i valori delle relative proprietà
+var_dump($interstellar, $inception, $oppenheimer);
+
 ?>
 
 <!DOCTYPE html>
