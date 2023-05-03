@@ -11,6 +11,14 @@ Oggi pomeriggio ripassate i primi concetti di classe, variabili e metodi d'istan
 
 
 // definisco la classe Movie
+class Movie
+{
+    // definisco le variabili di istanza
+    public $title;
+    public $genre;
+    public $year;
+    public $mainCharacter;
+}
 
 ?>
 
