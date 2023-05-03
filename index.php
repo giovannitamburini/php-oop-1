@@ -18,62 +18,8 @@ Facciamo attenzione all’organizzazione del codice, suddividendolo in appositi 
 */
 
 
-// definisco la classe Movie
-class Movie
-{
-    // definisco le variabili di istanza
-    public $title;
-    public $genre;
-    public $year;
-    public $mainCharacter;
-    public $price;
-    public $discount;
-    public $finalPrice;
-
-    public static $director = "Christopher Nolan";
-
-    // definisco un costruttore (per rendere obbligatorio l'indicazione dei dati)
-    // costruttore base, senza un array
-    // function __construct(string $title, string $genre, int $year, string $mainCharacter, int $price)
-
-    // costruttore con array per il genere
-    function __construct(string $title, array $genre, int $year, string $mainCharacter, int $price)
-    {
-        $this->title = $title;
-        $this->genre = $genre;
-        $this->year = $year;
-        $this->mainCharacter = $mainCharacter;
-        $this->price = $price;
-
-        // eseguo i metodi di questa classe nel momento in cui istanzio dei suoi oggetti
-        $this->setDiscount($year);
-        $this->setFinalPrice($price, $this->setDiscount($year));
-    }
-
-    // funzione per calcolare il valore dello sconto ottenibile tramite l'"età" del film
-    public function setDiscount($year)
-    {
-        // calcolo la differenza tra l'anno corrente e l'anno di uscita del film per ottenere l'età del film
-        $movieAge = date("Y") - $year;
-
-        if ($movieAge > 2) {
-
-            $this->discount = 30;
-            return $this->discount;
-
-        } else {
-
-            $this->discount = 0;
-            return $this->discount;
-        }
-    }
-
-    // metodo per calcolare il prezzo finale tramite il prezzo e il valore dello sconto(ottenuto dalla funzione sopracitata "setDiscount")
-    public function setFinalPrice($price, $discount)
-    {
-        $this->finalPrice = ($price * (100 - $discount) / 100);
-    }
-}
+// importo la componente contentenente la classe Movie
+require_once './Models/Movie.php';
 
 // istanzio una nuova entità, cioè un nuovo oggetto
 // versione senza array
@@ -100,6 +46,12 @@ var_dump(Movie::$director);
 // stampo a schermo le nuova entità con i valori delle relative proprietà
 var_dump($interstellar, $inception, $oppenheimer);
 
+
+// aggrego i film(oggetti) in un array
+$Movies[] = $interstellar;
+$Movies[] = $inception;
+$Movies[] = $oppenheimer;
+
 ?>
 
 <!DOCTYPE html>
@@ -117,10 +69,79 @@ var_dump($interstellar, $inception, $oppenheimer);
 </head>
 
 <body>
+    <?php
+    include './Views/partials/header.php';
+    ?>
+
+    <div class="container pt-3">
+
+        <h1 class="text-primary">Boolflix</h1>
+
+        <h2>Movie of
+            <!-- prendo il valore della variabile statica dalla componente contenente la classe Movie -->
+            <?= Movie::$director ?>
+        </h2>
+
+
+
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Genre</th>
+                <th scope="col">Year</th>
+                <th scope="col">Main Character</th>
+                <th scope="col">Price</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Final Price</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <?php
+            foreach ($Movies as $singleMovie) {
+                ?>
+
+                <tr>
+                    <td>
+                        <?php echo $singleMovie->title ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->genre ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->year ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->mainCharacter ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->price ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->discount ?>
+                    </td>
+                    <td>
+                        <?php echo $singleMovie->finalPrice ?>
+                    </td>
+
+                </tr>
+
+                <?php
+            }
+
+            ?>
+        </tbody>
+    </table>
 
 
 
 
+    <?php
+    include './Views/partials/footer.php';
+    ?>
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
