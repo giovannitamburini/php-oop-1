@@ -18,8 +18,17 @@ class Movie
     public $genre;
     public $year;
     public $mainCharacter;
-}
 
+
+    // definisco un costruttore (per rendere obbligatorio l'indicazione dei dati)
+    function __construct(string $title, string $genre, int $year, string $mainCharacter)
+    {
+        $this->title = $title;
+        $this->genre = $genre;
+        $this->year = $year;
+        $this->$mainCharacter = $mainCharacter;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +38,7 @@ class Movie
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Php Class</title>
 </head>
 
 <body>
