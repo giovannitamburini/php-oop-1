@@ -21,36 +21,15 @@ Facciamo attenzione all’organizzazione del codice, suddividendolo in appositi 
 // importo la componente contentenente la classe Movie
 require_once './Models/Movie.php';
 
-// istanzio una nuova entità, cioè un nuovo oggetto
-// versione senza array
-// $interstellar = new Movie("Interstellar", "science fiction", 2014, "Matthew McConaughey", 15);
-//versione con array
-$interstellar = new Movie("Interstellar", ["science fiction", "adventure"], 2014, "Matthew McConaughey", 15);
+// importo la componente in cui istanzio le nuove entità di Movie e le inserisco all'interno dell'array $Movies
+require_once './Models/db.php';
 
-// istanzio una nuova entità, cioè un nuovo oggetto
-//versione senza array
-// $inception = new Movie("Inception", "science fiction", 2010, "Leonardo DiCaprio", 10);
-// versione con array
-$inception = new Movie("Inception", ["science fiction", "action"], 2010, "Leonardo DiCaprio", 10);
+session_start();
 
+if (!isset($_SESSION['movies'])) {
 
-// istanzio una nuova entità, cioè un nuovo oggetto
-// versione senza array
-// $oppenheimer = new Movie("Oppenheimer", "biographical", 2023, "Cillian Murphy", 20);
-// versione con array
-$oppenheimer = new Movie("Oppenheimer", ["biographical", "dramatic", "historical"], 2023, "Cillian Murphy", 20);
-
-// stampo a schermo la variabile statica
-var_dump(Movie::$director);
-
-// stampo a schermo le nuova entità con i valori delle relative proprietà
-var_dump($interstellar, $inception, $oppenheimer);
-
-
-// aggrego i film(oggetti) in un array
-$Movies[] = $interstellar;
-$Movies[] = $inception;
-$Movies[] = $oppenheimer;
+    $_SESSION['movies'] = $Movies;
+}
 
 ?>
 
@@ -75,68 +54,71 @@ $Movies[] = $oppenheimer;
 
     <div class="container pt-3">
 
-        <h1 class="text-primary">Boolflix</h1>
-
         <h2>Movie of
             <!-- prendo il valore della variabile statica dalla componente contenente la classe Movie -->
             <?= Movie::$director ?>
         </h2>
 
-
-
-    </div>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Year</th>
-                <th scope="col">Main Character</th>
-                <th scope="col">Price</th>
-                <th scope="col">Discount</th>
-                <th scope="col">Final Price</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            <?php
-            foreach ($Movies as $singleMovie) {
-                ?>
-
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $singleMovie->title ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->genre ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->year ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->mainCharacter ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->price ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->discount ?>
-                    </td>
-                    <td>
-                        <?php echo $singleMovie->finalPrice ?>
-                    </td>
-
+                    <th scope="col">Title</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Main Character</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Final Price</th>
                 </tr>
+            </thead>
+            <tbody>
 
                 <?php
-            }
+                foreach ($_SESSION['movies'] as $singleMovie) {
+                    ?>
 
-            ?>
-        </tbody>
-    </table>
+                    <tr>
+                        <td>
+                            <?= $singleMovie->title ?>
+                        </td>
+                        <td>
+                            <?= $singleMovie->genre ?>
+                        </td>
+                        <td>
+                            <?= $singleMovie->year ?>
+                        </td>
+                        <td>
+                            <?= $singleMovie->mainCharacter ?>
+                        </td>
+                        <td>
+                            <?= $singleMovie->price ?> $
+                        </td>
+                        <td>
+                            <?= $singleMovie->discount ?> %
+                        </td>
+                        <td>
+                            <?= $singleMovie->finalPrice ?> $
+                        </td>
 
+                    </tr>
 
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+
+        <form action="addMovie.php" method="POST">
+            <input type="text" name="title" placeholder="title" required>
+            <input type="text" name="genre" placeholder="genre" required>
+            <input type="number" name="year" placeholder="year" required>
+            <input type="text" name="mainCharacter" placeholder="mainCharacter" required>
+            <input type="number" name="price" placeholder="price" required>
+
+            <button type="sumbit">Add</button>
+        </form>
+
+    </div>
 
 
     <?php
